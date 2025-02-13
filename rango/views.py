@@ -1,12 +1,23 @@
 from django.shortcuts import render
 from django.conf import settings
+from rango.models import Category
+
 
 # Create your views here.
 from django.http import HttpResponse
 
+from django.shortcuts import render
+from rango.models import Category
+
 def index(request):
-    context_dict = {'boldmessage': 'Crunchy, creamy, cookie, candy, cupcake!'}
+    category_list = Category.objects.order_by('-likes')[:5]
+
+    context_dict = {}
+    context_dict['boldmessage'] = "Crunchy, creamy, cookie, candy, cupcake!"
+    context_dict['categories'] = category_list  # Pass categories to the template.
+
     return render(request, 'rango/index.html', context=context_dict)
+
 
 def about(request):
     context_dict = {'boldmessage': 'Dana'}
