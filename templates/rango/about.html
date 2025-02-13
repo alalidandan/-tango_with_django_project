@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>About Rango</title>
+</head>
+<body>
+    <h1>Rango says...</h1>
+    <p>here is the about page.</p>
+    <p>This tutorial has been put together by <strong>{{ boldmessage }}</strong>.</p>
+
+    <img src="/static/images/rango.jpg" alt="Picture of Rango" />
+    <img src="/media/cat.jpg" alt="Picture of a Cat." />
+
+
+    <p><a href="{% url 'rango:index' %}">Back to Home</a></p>
+</body>
+</html>
