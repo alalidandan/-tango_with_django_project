@@ -99,19 +99,17 @@ def register(request):
 
             profile = profile_form.save(commit=False)
             profile.user = user
+
             if 'picture' in request.FILES:
                 profile.picture = request.FILES['picture']
             profile.save()
-
             registered = True
-            return redirect('rango:index')
-
     else:
         user_form = UserForm()
         profile_form = UserProfileForm()
 
-    return render(request, 'rango/register.html', {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
-
+    return render(request, 'rango/register.html',
+                  context={'registered': registered, 'user_form': user_form, 'profile_form': profile_form})
 
 def user_login(request):
     if request.method == "POST":
@@ -135,7 +133,7 @@ def user_login(request):
 
 @login_required
 def restricted(request):
-    return HttpResponse("Since you're logged in, you can see this text!")
+    return render(request, 'rango/restricted.html')
 
 @login_required
 def user_logout(request):

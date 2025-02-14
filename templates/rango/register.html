@@ -1,23 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Register for Rango</title>
-</head>
-<body>
-    {% extends 'rango/base.html' %}
-    {% load staticfiles %}
+{% extends 'rango/base.html' %}
+{% load staticfiles %}
 
-    {% block title_block %} Register {% endblock %}
+{% block title_block %}
+    Register
+{% endblock %}
 
-    {% block body_block %}
+{% block body_block %}
     <h1>Register for Rango</h1>
 
     {% if registered %}
-        <strong>Thank you for registering!</strong>
-        <a href="{% url 'rango:index' %}">Return to homepage</a>
+        Rango says: <strong>thank you for registering!</strong>
+        <a href="{% url 'rango:index' %}">Return to the homepage.</a><br />
     {% else %}
-        <strong>Register here:</strong><br />
+        Rango says: <strong>register here!</strong>
         <form id="user_form" method="post" action="{% url 'rango:register' %}" enctype="multipart/form-data">
             {% csrf_token %}
             {{ user_form.as_p }}
@@ -25,7 +20,4 @@
             <input type="submit" name="submit" value="Register" />
         </form>
     {% endif %}
-
-    {% endblock %}
-</body>
-</html>
+{% endblock %}
