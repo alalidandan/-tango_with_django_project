@@ -9,6 +9,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta
 
+
 # Create your views here.
 
 def index(request):
@@ -21,13 +22,18 @@ def index(request):
         'boldmessage': "Crunchy, creamy, cookie, candy, cupcake!"
     }
 
-    response = render(request, 'rango/index.html', context=context_dict)
-    visitor_cookie_handler(request, response)
-    return response
+    visitor_cookie_handler(request)
+    return render(request, 'rango/index.html', context=context_dict)
+
 
 def about(request):
-    context_dict = {'boldmessage': 'Dana'}
+    visitor_cookie_handler(request)
+    context_dict = {
+        'boldmessage': 'Dana',
+        'visits': request.session.get('visits', 1)
+    }
     return render(request, 'rango/about.html', context=context_dict)
+
 
 def show_category(request, category_name_slug):
     context_dict = {}
@@ -115,6 +121,7 @@ def register(request):
     return render(request, 'rango/register.html',
                   context={'registered': registered, 'user_form': user_form, 'profile_form': profile_form})
 
+
 def user_login(request):
     if request.method == "POST":
         username = request.POST.get("username")
@@ -135,25 +142,27 @@ def user_login(request):
     else:
         return render(request, "rango/login.html")
 
+
 @login_required
 def restricted(request):
     return render(request, 'rango/restricted.html')
+
 
 @login_required
 def user_logout(request):
     logout(request)
     return redirect(reverse("rango:index"))
 
-def visitor_cookie_handler(request, response):
-    visits = int(request.COOKIES.get('visits', '1'))
 
-    last_visit_cookie = request.COOKIES.get('last_visit', str(datetime.now()))
+def visitor_cookie_handler(request):
+    visits = int(request.session.get('visits', '1'))
+    last_visit_cookie = request.session.get('last_visit', str(datetime.now()))
     last_visit_time = datetime.strptime(last_visit_cookie[:-7], '%Y-%m-%d %H:%M:%S')
 
     if (datetime.now() - last_visit_time) > timedelta(days=1):
         visits += 1
-        response.set_cookie('last_visit', str(datetime.now()))
+        request.session['last_visit'] = str(datetime.now())
     else:
-        response.set_cookie('last_visit', last_visit_cookie)
+        request.session['last_visit'] = last_visit_cookie
 
-    response.set_cookie('visits', visits)
+    request.session['visits'] = visits

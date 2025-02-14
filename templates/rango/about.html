@@ -13,6 +13,9 @@
     <img src="{% static 'images/rango.jpg' %}" alt="Picture of Rango" />
     <img src="{% static 'media/cat.jpg' %}" alt="Picture of a Cat." />
 
+    <p>Visits: {{ visits }}</p>
+
     <p><a href="{% url 'rango:index' %}">Back to Home</a></p>
 {% endblock %}
+
 
