@@ -18,6 +18,7 @@
         {% endfor %}
     </ul>
 
+    <a href="{% url 'rango:add_page' category_name_slug=category.slug %}">Add a Page</a><br />
 
 {% else %}
     <p>The specified category does not exist.</p>
