@@ -1,30 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{% if category %}{{ category.name }}{% else %}Category Not Found{% endif %}</title>
-</head>
-<body>
-{% if category %}
-    <h1>{{ category.name }}</h1>
-    <p>{{ category.likes }} Likes | {{ category.views }} Views</p>
+{% extends "rango/base.html" %}
 
-    <h3>Pages in this category:</h3>
-    <ul>
-        {% for page in pages %}
-            <li><a href="{{ page.url }}">{{ page.title }}</a></li>
-        {% empty %}
-            <li><strong>No pages currently in category.</strong></li>
-        {% endfor %}
-    </ul>
+{% block title_block %}
+    {% if category %}
+        {{ category.name }}
+    {% else %}
+        Category Not Found
+    {% endif %}
+{% endblock %}
 
-    <a href="{% url 'rango:add_page' category_name_slug=category.slug %}">Add a Page</a><br />
+{% block body_block %}
+    {% if category %}
+        <h1>{{ category.name }}</h1>
+        <p>{{ category.likes }} Likes | {{ category.views }} Views</p>
 
-{% else %}
-    <p>The specified category does not exist.</p>
-{% endif %}
+        <h3>Pages in this category:</h3>
+        <ul>
+            {% for page in pages %}
+                <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+            {% empty %}
+                <li><strong>No pages currently in category.</strong></li>
+            {% endfor %}
+        </ul>
 
-<a href="{% url 'rango:index' %}">Home</a>
+        <a href="{% url 'rango:add_page' category_name_slug=category.slug %}">Add a Page</a><br />
 
-</body>
-</html>
+    {% else %}
+        <p>The specified category does not exist.</p>
+    {% endif %}
+{% endblock %}
+
