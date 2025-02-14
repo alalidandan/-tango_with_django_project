@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% if category %}{{ category.name }}{% else %}Category Not Found{% endif %}</title>
+</head>
+<body>
+{% if category %}
+    <h1>{{ category.name }}</h1>
+    <p>{{ category.likes }} Likes | {{ category.views }} Views</p>
+
+    <h3>Pages in this category:</h3>
+    <ul>
+        {% for page in pages %}
+            <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+        {% empty %}
+            <li><strong>No pages currently in category.</strong></li>
+        {% endfor %}
+    </ul>
+
+
+{% else %}
+    <p>The specified category does not exist.</p>
+{% endif %}
+
+<a href="{% url 'rango:index' %}">Home</a>
+
+</body>
+</html>
