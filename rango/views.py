@@ -1,15 +1,12 @@
 from django.conf import settings
-from django.shortcuts import render, get_object_or_404
-from rango.models import Category, Page
-from django.shortcuts import render, redirect
 from rango.forms import CategoryForm
-# Create your views here.
 from django.urls import reverse
-from rango.forms import PageForm
-from django.shortcuts import render
-from rango.models import Category
+from django.shortcuts import render, redirect, get_object_or_404
+from rango.models import Category, Page
+from rango.forms import UserForm, UserProfileForm, PageForm
 
 
+# Create your views here.
 def index(request):
     category_list = Category.objects.order_by('-likes')[:5]
 
@@ -84,4 +81,29 @@ def add_page(request, category_name_slug):
     context_dict = {'form': form, 'category': category}
     return render(request, 'rango/add_page.html', context=context_dict)
 
+def register(request):
+    registered = False
 
+    if request.method == "POST":
+        user_form = UserForm(request.POST)
+        profile_form = UserProfileForm(request.POST, request.FILES)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user = user_form.save()
+            user.set_password(user.password)
+            user.save()
+
+            profile = profile_form.save(commit=False)
+            profile.user = user
+            if 'picture' in request.FILES:
+                profile.picture = request.FILES['picture']
+            profile.save()
+
+            registered = True
+            return redirect('rango:index')
+
+    else:
+        user_form = UserForm()
+        profile_form = UserProfileForm()
+
+    return render(request, 'rango/register.html', {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
